@@ -30,6 +30,18 @@ def init_db():
 def home():
     return "✅ SQLite GPS Server is running."
 
+@app.route('/data', methods=['GET'])
+def get_all_data():
+    try:
+        with sqlite3.connect(DB_FILE) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM GPSData")
+            rows = cursor.fetchall()
+            return jsonify(rows)
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)})
+
+
 # === Route: Receive Data ===
 @app.route('/upload', methods=['POST'])
 def receive_gps_data():
