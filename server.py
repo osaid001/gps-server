@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 from datetime import datetime
 import sqlite3
 import os
+import sys
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -48,6 +50,7 @@ def receive_gps_data():
     try:
         data = request.get_json(force=True)
         print("📥 Received:", data)
+        sys.stdout.flush()
 
         driver_id = data.get('driver_id', 'unknown')
         gps_points = data.get('points', [])
@@ -74,6 +77,7 @@ def receive_gps_data():
 
     except Exception as e:
         print("❌ Error:", e)
+        sys.stdout.flush()
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 if __name__ == '__main__':
