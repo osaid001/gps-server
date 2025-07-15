@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from datetime import datetime
 import pyodbc
+import os
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -56,5 +57,7 @@ def receive_gps_data():
         print("❌ Error:", e)
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
-if __name__ == '__main__':  # ✅ Fix: correct Python main guard
-    app.run(host='0.0.0.0', port=5000, debug=True)
+if __name__ == '__main__':
+    # ✅ Use the PORT Render gives us (important!)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
